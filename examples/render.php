@@ -9,6 +9,7 @@ declare(strict_types=1);
  */
 
 use Juaniquillo\SvgBackendComponents\SvgBackendComponent;
+use Juaniquillo\SvgBackendComponents\SvgRenderer;
 use Orchestra\Testbench\Foundation\Application;
 use Orchestra\Testbench\Foundation\Config;
 
@@ -17,10 +18,6 @@ require __DIR__.'/../vendor/autoload.php';
 Application::createFromConfig(Config::loadFromYaml(__DIR__.'/..'));
 
 $outputDir = __DIR__.'/output';
-
-if (! is_dir($outputDir)) {
-    mkdir($outputDir, recursive: true);
-}
 
 $files = glob(__DIR__.'/*.php') ?: [];
 
@@ -39,7 +36,5 @@ foreach ($files as $file) {
 
     $name = pathinfo($file, PATHINFO_FILENAME);
 
-    file_put_contents($outputDir.'/'.$name.'.svg', $component->toHtml()."\n");
-
-    echo "Rendered {$name}.svg\n";
+    echo 'Rendered '.SvgRenderer::make($component)->saveTo($outputDir.'/'.$name.'.svg')."\n";
 }
