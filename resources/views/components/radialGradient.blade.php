@@ -1,0 +1,1 @@
+<radialGradient {{ $attributes }}>{{ $slot }}</radialGradient>
