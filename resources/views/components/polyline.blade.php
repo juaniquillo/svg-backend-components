@@ -1,0 +1,1 @@
+<polyline {{ $attributes }}>{{ $slot }}</polyline>

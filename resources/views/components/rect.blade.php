@@ -1,0 +1,1 @@
+<rect {{ $attributes }}>{{ $slot }}</rect>

@@ -1,0 +1,1 @@
+<use {{ $attributes }}>{{ $slot }}</use>

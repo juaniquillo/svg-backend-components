@@ -1,0 +1,1 @@
+<tspan {{ $attributes }}>{{ $slot }}</tspan>

@@ -1,0 +1,1 @@
+<path {{ $attributes }}>{{ $slot }}</path>

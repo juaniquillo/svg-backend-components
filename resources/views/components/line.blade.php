@@ -1,0 +1,1 @@
+<line {{ $attributes }}>{{ $slot }}</line>

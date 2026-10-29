@@ -1,0 +1,1 @@
+<ellipse {{ $attributes }}>{{ $slot }}</ellipse>
