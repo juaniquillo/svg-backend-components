@@ -23,4 +23,10 @@ enum SvgComponentEnum: string
     case TEXT = 'text';
     case TSPAN = 'tspan';
     case IMAGE = 'image';
+    case LINEAR_GRADIENT = 'linearGradient';
+    case RADIAL_GRADIENT = 'radialGradient';
+    case STOP = 'stop';
+    case CLIP_PATH = 'clipPath';
+    case MASK = 'mask';
+    case PATTERN = 'pattern';
 }

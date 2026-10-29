@@ -62,6 +62,18 @@ $path = SvgComponentBuilder::make(SvgComponentEnum::PATH)
     ->setTheme('color', 'success');
 ```
 
+## Rendering
+
+Turn any component into a standalone SVG document string, or write it straight to disk:
+
+```php
+use Juaniquillo\SvgBackendComponents\SvgRenderer;
+
+$svg = SvgRenderer::make($component)->toSvg();
+
+SvgRenderer::make($component)->saveTo('path/to/icon.svg');
+```
+
 ## Guardrails
 
 - Always use `SvgComponentEnum` cases, never raw element name strings.

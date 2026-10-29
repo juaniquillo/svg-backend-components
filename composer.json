@@ -68,6 +68,9 @@
         "test:unit": [
             "@php bin/pest.php"
         ],
+        "examples": [
+            "@php examples/render.php"
+        ],
         "qa": [
             "@test:larastan",
             "@rector:check",

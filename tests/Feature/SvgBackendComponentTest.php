@@ -195,3 +195,37 @@ it('renders any svg element to html', function () {
         ->assertSee('<circle', false)
         ->assertSee('r="10"', false);
 });
+
+it('renders camelCase svg elements to html', function () {
+    $component = (new SvgBackendComponent(SvgComponentEnum::LINEAR_GRADIENT))
+        ->setAttribute('id', 'fade')
+        ->setContents([
+            (new SvgBackendComponent(SvgComponentEnum::STOP))
+                ->setAttributes(['offset' => '0%', 'stop-color' => 'white']),
+        ]);
+
+    $this->blade('{{ $component }}', ['component' => $component])
+        ->assertSee('<linearGradient', false)
+        ->assertSee('id="fade"', false)
+        ->assertSee('<stop', false)
+        ->assertSee('offset="0%"', false);
+});
+
+it('renders a gradient fill referencing defs', function () {
+    $component = (new SvgBackendComponent(SvgComponentEnum::SVG))
+        ->setAttribute('viewBox', '0 0 100 100')
+        ->setContents([
+            (new SvgBackendComponent(SvgComponentEnum::DEFS))
+                ->setContents([
+                    (new SvgBackendComponent(SvgComponentEnum::LINEAR_GRADIENT))
+                        ->setAttribute('id', 'fade'),
+                ]),
+            (new SvgBackendComponent(SvgComponentEnum::RECT))
+                ->setAttributes(['width' => '100', 'height' => '100', 'fill' => 'url(#fade)']),
+        ]);
+
+    $this->blade('{{ $component }}', ['component' => $component])
+        ->assertSee('<defs', false)
+        ->assertSee('<linearGradient', false)
+        ->assertSee('fill="url(#fade)"', false);
+});

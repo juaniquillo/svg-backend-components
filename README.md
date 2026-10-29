@@ -94,6 +94,26 @@ $path = SvgComponentBuilder::make(SvgComponentEnum::PATH)
 
 Theme files live in your app's `resources/views/_themes/tailwind/` directory (one Blade file per theme group returning a variant array), resolved through the local theme builders.
 
+## Examples
+
+The `examples/` directory holds one runnable script per use-case (basic shapes, paths, reuse with `defs`/`use`, gradients, clipping, text, images, theming). Each file returns a complete `<svg>` document; render them all with:
+
+```
+composer examples
+```
+
+Outputs are written to `examples/output/*.svg` (gitignored) so you can open them directly in a browser.
+
+Need the markup as a string or written to disk from your own code? Use the renderer:
+
+```
+use Juaniquillo\SvgBackendComponents\SvgRenderer;
+
+$svg = SvgRenderer::make($icon)->toSvg(); // full SVG document string
+
+SvgRenderer::make($icon)->saveTo(storage_path('app/icon.svg')); // writes the file, returns its path
+```
+
 ## Testing
 
 Individual checks:

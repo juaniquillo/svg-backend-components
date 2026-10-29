@@ -1,0 +1,1 @@
+<pattern {{ $attributes }}>{{ $slot }}</pattern>

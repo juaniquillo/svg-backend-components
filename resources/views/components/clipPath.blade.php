@@ -1,0 +1,1 @@
+<clipPath {{ $attributes }}>{{ $slot }}</clipPath>
