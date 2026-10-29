@@ -15,6 +15,25 @@ it('builds a component from the enum', function () {
         ->and($component->getName())->toBe('path');
 });
 
+it('builds an svg root with a default xmlns', function () {
+    $component = SvgComponentBuilder::svg(
+        [SvgComponentBuilder::make(SvgComponentEnum::CIRCLE)->setAttribute('r', '10')],
+        ['viewBox' => '0 0 24 24'],
+    );
+
+    expect($component)->toBeInstanceOf(SvgBackendComponent::class)
+        ->and($component->getName())->toBe('svg')
+        ->and($component->getAttribute('xmlns'))->toBe('http://www.w3.org/2000/svg')
+        ->and($component->getAttribute('viewBox'))->toBe('0 0 24 24')
+        ->and($component->getContents())->toHaveCount(1);
+});
+
+it('lets custom attributes win over the default xmlns', function () {
+    $component = SvgComponentBuilder::svg([], ['xmlns' => 'custom']);
+
+    expect($component->getAttribute('xmlns'))->toBe('custom');
+});
+
 it('resolves local themes with the local theme builder', function () {
     $component = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::PATH);
 
