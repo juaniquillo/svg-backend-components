@@ -45,8 +45,13 @@ use Juaniquillo\SvgBackendComponents\Builders\SvgComponentBuilder;
 use Juaniquillo\SvgBackendComponents\Builders\SvgLocalThemeComponentBuilder;
 use Juaniquillo\SvgBackendComponents\SvgComponentEnum;
 
-$circle = SvgComponentBuilder::make(SvgComponentEnum::CIRCLE)
-    ->setAttribute('r', '10');
+// Root shorthand: xmlns is set for you.
+$icon = SvgComponentBuilder::svg($contents, ['viewBox' => '0 0 24 24']);
+
+// Viewport helpers instead of raw strings:
+$icon = SvgComponentBuilder::make(SvgComponentEnum::SVG)
+    ->setViewBox(0, 0, 24, 24)
+    ->setSize(24); // square; setSize(200, 100) for rectangles
 
 // Resolves themes from the app's resources/views/_themes/tailwind/ instead of package defaults.
 $themed = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::PATH)

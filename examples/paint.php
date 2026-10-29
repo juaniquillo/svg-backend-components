@@ -5,14 +5,8 @@ declare(strict_types=1);
 use Juaniquillo\SvgBackendComponents\Builders\SvgComponentBuilder;
 use Juaniquillo\SvgBackendComponents\SvgComponentEnum;
 
-return SvgComponentBuilder::make(SvgComponentEnum::SVG)
-    ->setAttributes([
-        'xmlns' => 'http://www.w3.org/2000/svg',
-        'viewBox' => '0 0 200 100',
-        'width' => '200',
-        'height' => '100',
-    ])
-    ->setContents([
+return SvgComponentBuilder::svg(
+    [
         SvgComponentBuilder::make(SvgComponentEnum::DEFS)
             ->setContents([
                 SvgComponentBuilder::make(SvgComponentEnum::LINEAR_GRADIENT)
@@ -36,4 +30,10 @@ return SvgComponentBuilder::make(SvgComponentEnum::SVG)
             ->setAttributes(['x' => '10', 'y' => '10', 'width' => '85', 'height' => '80', 'fill' => 'url(#fade)']),
         SvgComponentBuilder::make(SvgComponentEnum::CIRCLE)
             ->setAttributes(['cx' => '150', 'cy' => '50', 'r' => '40', 'fill' => 'url(#glow)']),
-    ]);
+    ],
+    [
+        'viewBox' => '0 0 200 100',
+        'width' => '200',
+        'height' => '100',
+    ],
+);

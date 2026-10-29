@@ -30,9 +30,10 @@ What this package adds on top:
 
 For the full mechanics (theming file format, serialization, the Blade rendering pipeline, helpers) see the [Laravel Backend Components documentation](https://github.com/juaniquillo/backend-component-docs).
 
-> **Tip: Laravel Boost Skill** If you use Laravel Boost, install the AI skill:
->
-> ```
+> [!TIP]
+> #### Laravel Boost Skill
+> If you use [Laravel Boost](https://github.com/laravel/boost), install the AI skill:
+> ```bash
 > php artisan boost:add-skill https://github.com/juaniquillo/svg-backend-components
 > ```
 
@@ -68,15 +69,22 @@ $html = $icon->toHtml();
 
 ### Builders
 
-Fluent factories are available when you prefer them over `new`:
+Fluent factories are available when you prefer them over `new`. The `svg()` shorthand builds a root element with the `xmlns` attribute already set:
 
 ```
 use Juaniquillo\SvgBackendComponents\Builders\SvgComponentBuilder;
 use Juaniquillo\SvgBackendComponents\Builders\SvgLocalThemeComponentBuilder;
 use Juaniquillo\SvgBackendComponents\SvgComponentEnum;
 
-$circle = SvgComponentBuilder::make(SvgComponentEnum::CIRCLE)
-    ->setAttribute('r', '10');
+$icon = SvgComponentBuilder::svg(
+    [(new SvgBackendComponent(SvgComponentEnum::PATH))->setAttribute('d', 'M0 0h24v24H0z')],
+    ['viewBox' => '0 0 24 24'],
+);
+
+// Or build the root by hand and set the viewport with helpers:
+$icon = SvgComponentBuilder::make(SvgComponentEnum::SVG)
+    ->setViewBox(0, 0, 24, 24)
+    ->setSize(24);
 
 // Resolves themes from your app's views instead of the package defaults.
 $themed = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::PATH)

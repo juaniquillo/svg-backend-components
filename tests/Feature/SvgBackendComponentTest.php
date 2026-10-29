@@ -19,6 +19,29 @@ it('accepts a raw string name', function () {
     expect($component->getName())->toBe('path');
 });
 
+it('builds from the static factory', function () {
+    $component = SvgBackendComponent::make(SvgComponentEnum::PATH);
+
+    expect($component)->toBeInstanceOf(SvgBackendComponent::class)
+        ->and($component->getName())->toBe('path');
+});
+
+it('sets the viewBox from coordinates', function () {
+    $component = (new SvgBackendComponent(SvgComponentEnum::SVG))->setViewBox(0, 0, 24, 24);
+
+    expect($component->getAttribute('viewBox'))->toBe('0 0 24 24');
+});
+
+it('sets width and height with setSize', function () {
+    $square = (new SvgBackendComponent(SvgComponentEnum::SVG))->setSize(24);
+
+    expect($square->getAttributes())->toBe(['width' => 24, 'height' => 24]);
+
+    $rectangle = (new SvgBackendComponent(SvgComponentEnum::SVG))->setSize(200, 100);
+
+    expect($rectangle->getAttributes())->toBe(['width' => 200, 'height' => 100]);
+});
+
 it('uses the svg view namespace for the component path', function () {
     $component = new SvgBackendComponent(SvgComponentEnum::PATH);
 

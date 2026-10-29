@@ -17,17 +17,22 @@ use Juaniquillo\BackendComponents\Contracts\BackendComponent;
 use Juaniquillo\BackendComponents\Contracts\ContentComponent;
 use Juaniquillo\BackendComponents\Contracts\PathComponent;
 use Juaniquillo\BackendComponents\Contracts\SettingsComponent;
+use Juaniquillo\BackendComponents\Contracts\StaticBuilder;
 use Juaniquillo\BackendComponents\Contracts\ThemeComponent;
 use Juaniquillo\BackendComponents\Contracts\ThemeManager;
 use Juaniquillo\BackendComponents\Themes\DefaultThemeManager;
+use Juaniquillo\SvgBackendComponents\Concerns\HasSvgAttributes;
+use Juaniquillo\SvgBackendComponents\Contracts\SvgAttributesComponent;
+use Override;
 
 use function Juaniquillo\BackendComponents\isBackedEnum;
 
-final class SvgBackendComponent implements BackendComponent, ContentComponent, Htmlable, PathComponent, SettingsComponent, ThemeComponent
+final class SvgBackendComponent implements BackendComponent, ContentComponent, Htmlable, PathComponent, SettingsComponent, StaticBuilder, SvgAttributesComponent, ThemeComponent
 {
     use HasContent;
     use HasPath;
     use HasSettings;
+    use HasSvgAttributes;
     use IsBackendComponent;
     use IsThemeable;
 
@@ -38,6 +43,12 @@ final class SvgBackendComponent implements BackendComponent, ContentComponent, H
         ThemeManager $themeManager = new DefaultThemeManager,
     ) {
         $this->themeManager = $themeManager;
+    }
+
+    #[Override]
+    public static function make(string|BackedEnum $name): static
+    {
+        return new self($name);
     }
 
     /**
