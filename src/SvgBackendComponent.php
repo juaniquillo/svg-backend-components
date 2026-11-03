@@ -24,6 +24,7 @@ use Juaniquillo\BackendComponents\Themes\DefaultThemeManager;
 use Juaniquillo\SvgBackendComponents\Concerns\HasSvgAttributes;
 use Juaniquillo\SvgBackendComponents\Contracts\SvgAttributesComponent;
 use Override;
+use ValueError;
 
 use function Juaniquillo\BackendComponents\isBackedEnum;
 
@@ -42,6 +43,16 @@ final class SvgBackendComponent implements BackendComponent, ContentComponent, H
         private string|BackedEnum $name,
         ThemeManager $themeManager = new DefaultThemeManager,
     ) {
+        if (\is_string($name) && SvgComponentEnum::tryFrom($name) === null) {
+            $accepted = [];
+
+            foreach (SvgComponentEnum::cases() as $case) {
+                $accepted[] = $case->value;
+            }
+
+            throw new ValueError('Invalid SVG element ['.$name.']. Expected one of ['.\implode(', ', $accepted).'] in ['.SvgComponentEnum::class.'].');
+        }
+
         $this->themeManager = $themeManager;
     }
 

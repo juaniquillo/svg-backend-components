@@ -8,11 +8,11 @@ use Juaniquillo\SvgBackendComponents\SvgComponentEnum;
 
 $rect = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::RECT)
     ->setAttributes(['x' => '10', 'y' => '10', 'width' => '80', 'height' => '80'])
-    // Note: setTheme() only compiles to a class attribute (class="fill-sky-500").
+    // Note: setTheme() only compiles to a class attribute (class="fill-slate-400").
     // Resolving that class into paint is your app's Tailwind build responsibility,
     // so this file renders as an unfilled rect until the theme file is covered by
     // your Tailwind content paths.
-    ->setTheme('color', 'ocean');
+    ->setTheme('fill', 'muted');
 
 $rect->getThemeManager()->setDefaultPath(__DIR__.'/themes/tailwind');
 

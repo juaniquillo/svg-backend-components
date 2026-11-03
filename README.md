@@ -101,7 +101,7 @@ use Juaniquillo\SvgBackendComponents\Shapes\SvgShape;
 $rect = SvgShape::rect(10, 10, 80, 50)->setFill('#3b82f6');
 $circle = SvgShape::circle(140, 35, 25)->setFill('#ef4444');
 
-// Path data builder for the `d` attribute (curves stay raw until needed):
+// Path data builder for the `d` attribute (prefer the command methods; raw() for anything else):
 use Juaniquillo\SvgBackendComponents\Shapes\SvgPath;
 
 $path = SvgShape::path(
@@ -109,8 +109,9 @@ $path = SvgShape::path(
 )->setFill('none');
 
 // Resolves themes from your app's views instead of the package defaults.
+// Group names are app-defined; this app paints SVG through its `fill` group.
 $themed = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::PATH)
-    ->setTheme('color', 'success');
+    ->setTheme('fill', 'muted');
 ```
 
 ### Themes
@@ -119,7 +120,7 @@ Apply Tailwind theme variants with `setTheme()` / `setThemes()`:
 
 ```php
 $path = SvgComponentBuilder::make(SvgComponentEnum::PATH)
-    ->setTheme('color', 'success');
+    ->setTheme('fill', 'muted');
 ```
 
 Theme files live in your app's `resources/views/_themes/tailwind/` directory (one Blade file per theme group returning a variant array), resolved through the local theme builders. See [theming in the engine docs](https://github.com/juaniquillo/backend-component-docs/blob/main/05-theming.md) for the file format.
