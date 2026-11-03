@@ -16,6 +16,8 @@ $rect = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::RECT)
 
 $rect->getThemeManager()->setDefaultPath(__DIR__.'/themes/tailwind');
 
-return SvgComponentBuilder::svg([$rect])
+return SvgComponentBuilder::make(SvgComponentEnum::SVG)
+    ->setXmlns()
     ->setViewBox(0, 0, 100, 100)
-    ->setSize(100);
+    ->setSize(100)
+    ->setContents([$rect]);

@@ -5,8 +5,11 @@ declare(strict_types=1);
 use Juaniquillo\SvgBackendComponents\Builders\SvgComponentBuilder;
 use Juaniquillo\SvgBackendComponents\SvgComponentEnum;
 
-return SvgComponentBuilder::svg(
-    [
+return SvgComponentBuilder::make(SvgComponentEnum::SVG)
+    ->setXmlns()
+    ->setViewBox(0, 0, 200, 80)
+    ->setSize(200, 80)
+    ->setContents([
         SvgComponentBuilder::make(SvgComponentEnum::TEXT)
             ->setAttributes(['x' => '100', 'y' => '35', 'text-anchor' => 'middle', 'font-size' => '20', 'fill' => '#111827'])
             ->setContents([
@@ -15,10 +18,4 @@ return SvgComponentBuilder::svg(
                     ->setAttributes(['font-weight' => 'bold', 'fill' => '#3b82f6'])
                     ->setContent('SVG'),
             ]),
-    ],
-    [
-        'viewBox' => '0 0 200 80',
-        'width' => '200',
-        'height' => '80',
-    ],
-);
+    ]);

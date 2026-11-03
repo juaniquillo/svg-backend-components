@@ -69,22 +69,27 @@ $html = $icon->toHtml();
 
 ### Builders
 
-Fluent factories are available when you prefer them over `new`. The `svg()` shorthand builds a root element with the `xmlns` attribute already set:
+Fluent factories are available when you prefer them over `new`:
 
 ```
 use Juaniquillo\SvgBackendComponents\Builders\SvgComponentBuilder;
 use Juaniquillo\SvgBackendComponents\Builders\SvgLocalThemeComponentBuilder;
 use Juaniquillo\SvgBackendComponents\SvgComponentEnum;
 
-$icon = SvgComponentBuilder::svg(
-    [(new SvgBackendComponent(SvgComponentEnum::PATH))->setAttribute('d', 'M0 0h24v24H0z')],
-    ['viewBox' => '0 0 24 24'],
-);
-
-// Or build the root by hand and set the viewport with helpers:
 $icon = SvgComponentBuilder::make(SvgComponentEnum::SVG)
+    ->setXmlns()
     ->setViewBox(0, 0, 24, 24)
-    ->setSize(24);
+    ->setSize(24)
+    ->setContents([
+        (new SvgBackendComponent(SvgComponentEnum::PATH))->setAttribute('d', 'M0 0h24v24H0z'),
+    ]);
+
+// Aliases for common presentation attributes:
+$rect = SvgComponentBuilder::make(SvgComponentEnum::RECT)
+    ->setFill('#3b82f6')
+    ->setStroke('#111827')
+    ->setStrokeWidth(2)
+    ->setOpacity(0.5);
 
 // Resolves themes from your app's views instead of the package defaults.
 $themed = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::PATH)

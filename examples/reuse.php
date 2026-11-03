@@ -5,8 +5,11 @@ declare(strict_types=1);
 use Juaniquillo\SvgBackendComponents\Builders\SvgComponentBuilder;
 use Juaniquillo\SvgBackendComponents\SvgComponentEnum;
 
-return SvgComponentBuilder::svg(
-    [
+return SvgComponentBuilder::make(SvgComponentEnum::SVG)
+    ->setXmlns()
+    ->setViewBox(0, 0, 200, 100)
+    ->setSize(200, 100)
+    ->setContents([
         SvgComponentBuilder::make(SvgComponentEnum::DEFS)
             ->setContents([
                 SvgComponentBuilder::make(SvgComponentEnum::CIRCLE)
@@ -22,10 +25,4 @@ return SvgComponentBuilder::svg(
                 SvgComponentBuilder::make(SvgComponentEnum::USE)
                     ->setAttributes(['href' => '#dot', 'x' => '90', 'y' => '50']),
             ]),
-    ],
-    [
-        'viewBox' => '0 0 200 100',
-        'width' => '200',
-        'height' => '100',
-    ],
-);
+    ]);

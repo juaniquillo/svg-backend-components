@@ -5,8 +5,11 @@ declare(strict_types=1);
 use Juaniquillo\SvgBackendComponents\Builders\SvgComponentBuilder;
 use Juaniquillo\SvgBackendComponents\SvgComponentEnum;
 
-return SvgComponentBuilder::svg(
-    [
+return SvgComponentBuilder::make(SvgComponentEnum::SVG)
+    ->setXmlns()
+    ->setViewBox(0, 0, 200, 100)
+    ->setSize(200, 100)
+    ->setContents([
         SvgComponentBuilder::make(SvgComponentEnum::DEFS)
             ->setContents([
                 SvgComponentBuilder::make(SvgComponentEnum::CLIP_PATH)
@@ -26,10 +29,4 @@ return SvgComponentBuilder::svg(
             ->setAttributes(['x' => '10', 'y' => '10', 'width' => '80', 'height' => '80', 'fill' => '#f97316', 'clip-path' => 'url(#round)']),
         SvgComponentBuilder::make(SvgComponentEnum::RECT)
             ->setAttributes(['x' => '110', 'y' => '10', 'width' => '80', 'height' => '80', 'fill' => 'url(#dots)']),
-    ],
-    [
-        'viewBox' => '0 0 200 100',
-        'width' => '200',
-        'height' => '100',
-    ],
-);
+    ]);
