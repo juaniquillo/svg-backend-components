@@ -1,5 +1,7 @@
 # Svg Backend Components
 
+[![CI](https://github.com/juaniquillo/svg-backend-components/actions/workflows/ci.yml/badge.svg)](https://github.com/juaniquillo/svg-backend-components/actions/workflows/ci.yml)
+
 Build SVG graphics from PHP. This package lets you compose SVG elements in backend code with content, attributes, settings, and Tailwind themes, and render them anywhere Blade renders.
 
 ## Requirements
