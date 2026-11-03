@@ -26,6 +26,12 @@ it('builds from the static factory', function () {
         ->and($component->getName())->toBe('path');
 });
 
+it('sets the xmlns with a default uri', function () {
+    $component = (new SvgBackendComponent(SvgComponentEnum::SVG))->setXmlns();
+
+    expect($component->getAttribute('xmlns'))->toBe('http://www.w3.org/2000/svg');
+});
+
 it('sets the viewBox from coordinates', function () {
     $component = (new SvgBackendComponent(SvgComponentEnum::SVG))->setViewBox(0, 0, 24, 24);
 
@@ -40,6 +46,39 @@ it('sets width and height with setSize', function () {
     $rectangle = (new SvgBackendComponent(SvgComponentEnum::SVG))->setSize(200, 100);
 
     expect($rectangle->getAttributes())->toBe(['width' => 200, 'height' => 100]);
+});
+
+it('sets presentation attributes with aliases', function () {
+    $component = (new SvgBackendComponent(SvgComponentEnum::RECT))
+        ->setFill('#3b82f6')
+        ->setStroke('#111827')
+        ->setStrokeWidth(2)
+        ->setOpacity(0.5);
+
+    expect($component->getAttributes())->toBe([
+        'fill' => '#3b82f6',
+        'stroke' => '#111827',
+        'stroke-width' => 2,
+        'opacity' => '0.5',
+    ]);
+});
+
+it('chains the full fluent root setup', function () {
+    $component = SvgBackendComponent::make(SvgComponentEnum::SVG)
+        ->setXmlns()
+        ->setViewBox(0, 0, 24, 24)
+        ->setSize(24)
+        ->setFill('none')
+        ->setStroke('#111827');
+
+    expect($component->getAttributes())->toBe([
+        'xmlns' => 'http://www.w3.org/2000/svg',
+        'viewBox' => '0 0 24 24',
+        'width' => 24,
+        'height' => 24,
+        'fill' => 'none',
+        'stroke' => '#111827',
+    ]);
 });
 
 it('uses the svg view namespace for the component path', function () {

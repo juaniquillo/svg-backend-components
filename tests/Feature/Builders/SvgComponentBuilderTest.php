@@ -15,21 +15,30 @@ it('builds a component from the enum', function () {
         ->and($component->getName())->toBe('path');
 });
 
-it('builds an svg root with a default xmlns', function () {
-    $component = SvgComponentBuilder::svg(
-        [SvgComponentBuilder::make(SvgComponentEnum::CIRCLE)->setAttribute('r', '10')],
-        ['viewBox' => '0 0 24 24'],
-    );
+it('builds an svg root with the fluent helpers', function () {
+    $component = SvgComponentBuilder::make(SvgComponentEnum::SVG)
+        ->setXmlns()
+        ->setViewBox(0, 0, 24, 24)
+        ->setSize(24)
+        ->setContents([
+            SvgComponentBuilder::make(SvgComponentEnum::CIRCLE)->setAttribute('r', '10'),
+        ]);
 
     expect($component)->toBeInstanceOf(SvgBackendComponent::class)
         ->and($component->getName())->toBe('svg')
         ->and($component->getAttribute('xmlns'))->toBe('http://www.w3.org/2000/svg')
         ->and($component->getAttribute('viewBox'))->toBe('0 0 24 24')
+        ->and($component->getAttributes())->toBe([
+            'xmlns' => 'http://www.w3.org/2000/svg',
+            'viewBox' => '0 0 24 24',
+            'width' => 24,
+            'height' => 24,
+        ])
         ->and($component->getContents())->toHaveCount(1);
 });
 
-it('lets custom attributes win over the default xmlns', function () {
-    $component = SvgComponentBuilder::svg([], ['xmlns' => 'custom']);
+it('accepts a custom xmlns uri', function () {
+    $component = SvgComponentBuilder::make(SvgComponentEnum::SVG)->setXmlns('custom');
 
     expect($component->getAttribute('xmlns'))->toBe('custom');
 });
