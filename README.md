@@ -27,6 +27,8 @@ What this package adds on top:
 - `SvgBackendComponent`: the component class, hardcoded to the `svg::` view context
 - `SvgComponentEnum`: SVG elements as typed cases (`SVG`, `G`, `PATH`, `CIRCLE`, …)
 - `SvgComponentBuilder` / `SvgLocalThemeComponentBuilder`: fluent factories, including app-local theme resolution
+- `SvgShape` / `SvgPath`: shape presets for common geometry and a builder for path `d` data
+- `SvgRenderer`: standalone SVG document strings and file output via `toSvg()` / `saveTo()`
 
 For the full mechanics (theming file format, serialization, the Blade rendering pipeline, helpers) see the [Laravel Backend Components documentation](https://github.com/juaniquillo/backend-component-docs).
 
@@ -91,6 +93,19 @@ $rect = SvgComponentBuilder::make(SvgComponentEnum::RECT)
     ->setStrokeWidth(2)
     ->setOpacity(0.5);
 
+// Shape presets for common geometry (same component back, fully chainable):
+use Juaniquillo\SvgBackendComponents\Shapes\SvgShape;
+
+$rect = SvgShape::rect(10, 10, 80, 50)->setFill('#3b82f6');
+$circle = SvgShape::circle(140, 35, 25)->setFill('#ef4444');
+
+// Path data builder for the `d` attribute (curves stay raw until needed):
+use Juaniquillo\SvgBackendComponents\Shapes\SvgPath;
+
+$path = SvgShape::path(
+    SvgPath::start(10, 100)->lineTo(60, 40)->close()
+)->setFill('none');
+
 // Resolves themes from your app's views instead of the package defaults.
 $themed = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::PATH)
     ->setTheme('color', 'success');
@@ -109,7 +124,7 @@ Theme files live in your app's `resources/views/_themes/tailwind/` directory (on
 
 ## Examples
 
-The `examples/` directory holds one runnable script per use-case (basic shapes, paths, reuse with `defs`/`use`, gradients, clipping, text, images, theming). Each file returns a complete `<svg>` document; render them all with:
+The `examples/` directory holds one runnable script per use-case (basic shapes, paths, path data builder, reuse with `defs`/`use`, gradients, clipping, text, images, theming). Each file returns a complete `<svg>` document; render them all with:
 
 ```
 composer examples
