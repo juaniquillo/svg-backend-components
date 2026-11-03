@@ -78,7 +78,7 @@ $themed = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::PATH)
 
 ## Themes
 
-Apply Tailwind variants with `setTheme()` / `setThemes()`. Theme files live in the app's `resources/views/_themes/tailwind/` (one Blade file per group returning a variant array):
+Apply Tailwind variants with `setTheme()` / `setThemes()`. Theme files live in the app's `resources/views/_themes/tailwind/` (one Blade file per group returning a variant array). See [theming in the engine docs](https://github.com/juaniquillo/backend-component-docs/blob/main/05-theming.md) for the file format:
 
 ```php
 $path = SvgComponentBuilder::make(SvgComponentEnum::PATH)

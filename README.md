@@ -1,5 +1,7 @@
 # Svg Backend Components
 
+[![CI](https://github.com/juaniquillo/svg-backend-components/actions/workflows/ci.yml/badge.svg)](https://github.com/juaniquillo/svg-backend-components/actions/workflows/ci.yml)
+
 Build SVG graphics from PHP. This package lets you compose SVG elements in backend code with content, attributes, settings, and Tailwind themes, and render them anywhere Blade renders.
 
 ## Requirements
@@ -12,7 +14,7 @@ Build SVG graphics from PHP. This package lets you compose SVG elements in backe
 
 You can install the package via Composer:
 
-```
+```bash
 composer require juaniquillo/svg-backend-components
 ```
 
@@ -47,7 +49,7 @@ Element attributes (`viewBox`, `d`, `fill`, …) are passed with `setAttribute()
 
 Pick an element from the enum, set content and attributes, and render it. Components implement Laravel's `Htmlable` contract, so Blade renders them unescaped:
 
-```
+```php
 use Juaniquillo\SvgBackendComponents\SvgBackendComponent;
 use Juaniquillo\SvgBackendComponents\SvgComponentEnum;
 
@@ -59,13 +61,13 @@ $icon = (new SvgBackendComponent(SvgComponentEnum::SVG))
     ]);
 ```
 
-```
+```blade
 {{ $icon }}
 ```
 
 Or render to a string anywhere:
 
-```
+```php
 $html = $icon->toHtml();
 ```
 
@@ -73,7 +75,7 @@ $html = $icon->toHtml();
 
 Fluent factories are available when you prefer them over `new`:
 
-```
+```php
 use Juaniquillo\SvgBackendComponents\Builders\SvgComponentBuilder;
 use Juaniquillo\SvgBackendComponents\Builders\SvgLocalThemeComponentBuilder;
 use Juaniquillo\SvgBackendComponents\SvgComponentEnum;
@@ -115,18 +117,18 @@ $themed = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::PATH)
 
 Apply Tailwind theme variants with `setTheme()` / `setThemes()`:
 
-```
+```php
 $path = SvgComponentBuilder::make(SvgComponentEnum::PATH)
     ->setTheme('color', 'success');
 ```
 
-Theme files live in your app's `resources/views/_themes/tailwind/` directory (one Blade file per theme group returning a variant array), resolved through the local theme builders.
+Theme files live in your app's `resources/views/_themes/tailwind/` directory (one Blade file per theme group returning a variant array), resolved through the local theme builders. See [theming in the engine docs](https://github.com/juaniquillo/backend-component-docs/blob/main/05-theming.md) for the file format.
 
 ## Examples
 
 The `examples/` directory holds one runnable script per use-case (basic shapes, paths, path data builder, reuse with `defs`/`use`, gradients, clipping, text, images, theming). Each file returns a complete `<svg>` document; render them all with:
 
-```
+```bash
 composer examples
 ```
 
@@ -134,7 +136,7 @@ Outputs are written to `examples/output/*.svg` (gitignored) so you can open them
 
 Need the markup as a string or written to disk from your own code? Use the renderer:
 
-```
+```php
 use Juaniquillo\SvgBackendComponents\SvgRenderer;
 
 $svg = SvgRenderer::make($icon)->toSvg(); // full SVG document string
@@ -154,7 +156,7 @@ Individual checks:
 
 Or run the whole gate at once, the same scripts CI executes, in order:
 
-```
+```bash
 composer qa
 ```
 
