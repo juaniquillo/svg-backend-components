@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Juaniquillo\BackendComponents\Themes\DefaultThemeManager;
 use Juaniquillo\BackendComponents\Themes\LocalThemeManager;
 use Juaniquillo\SvgBackendComponents\Builders\SvgComponentBuilder;
 use Juaniquillo\SvgBackendComponents\Builders\SvgLocalThemeComponentBuilder;
@@ -49,6 +50,15 @@ it('resolves local themes with the local theme builder', function () {
     expect($component)->toBeInstanceOf(SvgBackendComponent::class)
         ->and($component->getThemeManager())->toBeInstanceOf(LocalThemeManager::class)
         ->and($component->getName())->toBe('path');
+});
+
+it('isolates default and local theme paths per manager', function () {
+    $default = SvgComponentBuilder::make(SvgComponentEnum::PATH);
+    $local = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::PATH);
+
+    expect($default->getThemeManager())->toBeInstanceOf(DefaultThemeManager::class)
+        ->and($local->getThemeManager())->toBeInstanceOf(LocalThemeManager::class)
+        ->and($local->getThemeManager()->getDefaultPath())->not->toBe($default->getThemeManager()->getDefaultPath());
 });
 
 it('compiles themes from the app local theme path', function () {

@@ -21,6 +21,6 @@ return SvgComponentBuilder::make(SvgComponentEnum::SVG)
                 ->close()
         )->setFill('none')->setStroke('#8b5cf6')->setStrokeWidth(4),
         SvgShape::path(
-            SvgPath::start(120, 30)->raw('C 140 10, 170 10, 185 30')
+            SvgPath::start(120, 30)->curveTo(140, 10, 170, 10, 185, 30)
         )->setFill('none')->setStroke('#111827')->setStrokeWidth(4),
     ]);

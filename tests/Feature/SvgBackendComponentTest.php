@@ -19,6 +19,20 @@ it('accepts a raw string name', function () {
     expect($component->getName())->toBe('path');
 });
 
+it('accepts every enum case as a name', function () {
+    foreach (SvgComponentEnum::cases() as $case) {
+        expect((new SvgBackendComponent($case))->getName())->toBe($case->value);
+    }
+});
+
+it('rejects a string that is not an enum case value', function () {
+    expect(fn () => new SvgBackendComponent('circel'))->toThrow(ValueError::class, 'circel');
+});
+
+it('rejects an invalid name through the static factory', function () {
+    expect(fn () => SvgBackendComponent::make('circel'))->toThrow(ValueError::class, SvgComponentEnum::class);
+});
+
 it('builds from the static factory', function () {
     $component = SvgBackendComponent::make(SvgComponentEnum::PATH);
 
@@ -35,13 +49,18 @@ it('sets the xmlns with a default uri', function () {
 it('sets the viewBox from coordinates', function () {
     $component = (new SvgBackendComponent(SvgComponentEnum::SVG))->setViewBox(0, 0, 24, 24);
 
-    expect($component->getAttribute('viewBox'))->toBe('0 0 24 24');
+    expect($component->getAttribute('viewBox'))->toBe('0 0 24 24')
+        ->and((new SvgBackendComponent(SvgComponentEnum::SVG))->setViewBox(0, 0, 200, 120)->getAttribute('viewBox'))->toBe('0 0 200 120');
 });
 
 it('sets width and height with setSize', function () {
     $square = (new SvgBackendComponent(SvgComponentEnum::SVG))->setSize(24);
 
     expect($square->getAttributes())->toBe(['width' => 24, 'height' => 24]);
+
+    $specSquare = (new SvgBackendComponent(SvgComponentEnum::SVG))->setSize(56);
+
+    expect($specSquare->getAttributes())->toBe(['width' => 56, 'height' => 56]);
 
     $rectangle = (new SvgBackendComponent(SvgComponentEnum::SVG))->setSize(200, 100);
 
@@ -61,6 +80,20 @@ it('sets presentation attributes with aliases', function () {
         'stroke-width' => 2,
         'opacity' => '0.5',
     ]);
+});
+
+it('casts opacity to string', function () {
+    expect((new SvgBackendComponent(SvgComponentEnum::RECT))->setOpacity(0.6)->getAttribute('opacity'))->toBe('0.6');
+});
+
+it('stores null for nullable presentation attributes', function () {
+    $component = (new SvgBackendComponent(SvgComponentEnum::RECT))
+        ->setFill(null)
+        ->setStroke(null);
+
+    expect($component->getAttribute('fill'))->toBeNull()
+        ->and($component->getAttribute('stroke'))->toBeNull()
+        ->and($component->getAttributes())->toBe(['fill' => null, 'stroke' => null]);
 });
 
 it('chains the full fluent root setup', function () {
