@@ -28,8 +28,8 @@ What this package adds on top:
 
 - `SvgBackendComponent`: the component class, hardcoded to the `svg::` view context
 - `SvgComponentEnum`: SVG elements as typed cases (`SVG`, `G`, `PATH`, `CIRCLE`, …)
-- `SvgComponentBuilder` / `SvgLocalThemeComponentBuilder`: fluent factories, including app-local theme resolution
-- `SvgShape` / `SvgPath`: shape presets for common geometry and a builder for path `d` data
+- `SvgComponentFactory` / `SvgLocalThemeComponentFactory`: fluent factories, including app-local theme resolution
+- `SvgShape` / `SvgPath`: shape presets for common geometry and a helper for path `d` data
 - `SvgRenderer`: standalone SVG document strings and file output via `toSvg()` / `saveTo()`
 
 For the full mechanics (theming file format, serialization, the Blade rendering pipeline, helpers) see the [Laravel Backend Components documentation](https://github.com/juaniquillo/backend-component-docs).
@@ -71,16 +71,16 @@ Or render to a string anywhere:
 $html = $icon->toHtml();
 ```
 
-### Builders
+### Factories
 
 Fluent factories are available when you prefer them over `new`:
 
 ```php
-use Juaniquillo\SvgBackendComponents\Builders\SvgComponentBuilder;
-use Juaniquillo\SvgBackendComponents\Builders\SvgLocalThemeComponentBuilder;
+use Juaniquillo\SvgBackendComponents\Factories\SvgComponentFactory;
+use Juaniquillo\SvgBackendComponents\Factories\SvgLocalThemeComponentFactory;
 use Juaniquillo\SvgBackendComponents\SvgComponentEnum;
 
-$icon = SvgComponentBuilder::make(SvgComponentEnum::SVG)
+$icon = SvgComponentFactory::make(SvgComponentEnum::SVG)
     ->setXmlns()
     ->setViewBox(0, 0, 24, 24)
     ->setSize(24)
@@ -89,7 +89,7 @@ $icon = SvgComponentBuilder::make(SvgComponentEnum::SVG)
     ]);
 
 // Aliases for common presentation attributes:
-$rect = SvgComponentBuilder::make(SvgComponentEnum::RECT)
+$rect = SvgComponentFactory::make(SvgComponentEnum::RECT)
     ->setFill('#3b82f6')
     ->setStroke('#111827')
     ->setStrokeWidth(2)
@@ -101,7 +101,7 @@ use Juaniquillo\SvgBackendComponents\Shapes\SvgShape;
 $rect = SvgShape::rect(10, 10, 80, 50)->setFill('#3b82f6');
 $circle = SvgShape::circle(140, 35, 25)->setFill('#ef4444');
 
-// Path data builder for the `d` attribute (prefer the command methods; raw() for anything else):
+// Path data helper for the `d` attribute (prefer the command methods; raw() for anything else):
 use Juaniquillo\SvgBackendComponents\Shapes\SvgPath;
 
 $path = SvgShape::path(
@@ -110,7 +110,7 @@ $path = SvgShape::path(
 
 // Resolves themes from your app's views instead of the package defaults.
 // Group names are app-defined; this app paints SVG through its `fill` group.
-$themed = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::PATH)
+$themed = SvgLocalThemeComponentFactory::make(SvgComponentEnum::PATH)
     ->setTheme('fill', 'muted');
 ```
 
@@ -119,15 +119,15 @@ $themed = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::PATH)
 Apply Tailwind theme variants with `setTheme()` / `setThemes()`:
 
 ```php
-$path = SvgComponentBuilder::make(SvgComponentEnum::PATH)
+$path = SvgComponentFactory::make(SvgComponentEnum::PATH)
     ->setTheme('fill', 'muted');
 ```
 
-Theme files live in your app's `resources/views/_themes/tailwind/` directory (one Blade file per theme group returning a variant array), resolved through the local theme builders. See [theming in the engine docs](https://github.com/juaniquillo/backend-component-docs/blob/main/05-theming.md) for the file format.
+Theme files live in your app's `resources/views/_themes/tailwind/` directory (one Blade file per theme group returning a variant array), resolved through the local theme factories. See [theming in the engine docs](https://github.com/juaniquillo/backend-component-docs/blob/main/05-theming.md) for the file format.
 
 ## Examples
 
-The `examples/` directory holds one runnable script per use-case (basic shapes, paths, path data builder, reuse with `defs`/`use`, gradients, clipping, text, images, theming). Each file returns a complete `<svg>` document; render them all with:
+The `examples/` directory holds one runnable script per use-case (basic shapes, paths, path data helper, reuse with `defs`/`use`, gradients, clipping, text, images, theming). Each file returns a complete `<svg>` document; render them all with:
 
 ```bash
 composer examples
