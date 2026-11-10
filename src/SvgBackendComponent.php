@@ -17,7 +17,7 @@ use Juaniquillo\BackendComponents\Contracts\BackendComponent;
 use Juaniquillo\BackendComponents\Contracts\ContentComponent;
 use Juaniquillo\BackendComponents\Contracts\PathComponent;
 use Juaniquillo\BackendComponents\Contracts\SettingsComponent;
-use Juaniquillo\BackendComponents\Contracts\StaticBuilder;
+use Juaniquillo\BackendComponents\Contracts\StaticFactory;
 use Juaniquillo\BackendComponents\Contracts\ThemeComponent;
 use Juaniquillo\BackendComponents\Contracts\ThemeManager;
 use Juaniquillo\BackendComponents\Themes\DefaultThemeManager;
@@ -28,7 +28,7 @@ use ValueError;
 
 use function Juaniquillo\BackendComponents\isBackedEnum;
 
-final class SvgBackendComponent implements BackendComponent, ContentComponent, Htmlable, PathComponent, SettingsComponent, StaticBuilder, SvgAttributesComponent, ThemeComponent
+final class SvgBackendComponent implements BackendComponent, ContentComponent, Htmlable, PathComponent, SettingsComponent, StaticFactory, SvgAttributesComponent, ThemeComponent
 {
     use HasContent;
     use HasPath;
