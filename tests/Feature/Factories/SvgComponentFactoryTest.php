@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 use Juaniquillo\BackendComponents\Themes\DefaultThemeManager;
 use Juaniquillo\BackendComponents\Themes\LocalThemeManager;
-use Juaniquillo\SvgBackendComponents\Builders\SvgComponentBuilder;
-use Juaniquillo\SvgBackendComponents\Builders\SvgLocalThemeComponentBuilder;
+use Juaniquillo\SvgBackendComponents\Factories\SvgComponentFactory;
+use Juaniquillo\SvgBackendComponents\Factories\SvgLocalThemeComponentFactory;
 use Juaniquillo\SvgBackendComponents\SvgBackendComponent;
 use Juaniquillo\SvgBackendComponents\SvgComponentEnum;
 
-it('builds a component from the enum', function () {
-    $component = SvgComponentBuilder::make(SvgComponentEnum::PATH);
+it('creates a component from the enum', function () {
+    $component = SvgComponentFactory::make(SvgComponentEnum::PATH);
 
     expect($component)->toBeInstanceOf(SvgBackendComponent::class)
         ->and($component->getName())->toBe('path');
 });
 
-it('builds an svg root with the fluent helpers', function () {
-    $component = SvgComponentBuilder::make(SvgComponentEnum::SVG)
+it('creates an svg root with the fluent helpers', function () {
+    $component = SvgComponentFactory::make(SvgComponentEnum::SVG)
         ->setXmlns()
         ->setViewBox(0, 0, 24, 24)
         ->setSize(24)
         ->setContents([
-            SvgComponentBuilder::make(SvgComponentEnum::CIRCLE)->setAttribute('r', '10'),
+            SvgComponentFactory::make(SvgComponentEnum::CIRCLE)->setAttribute('r', '10'),
         ]);
 
     expect($component)->toBeInstanceOf(SvgBackendComponent::class)
@@ -39,13 +39,13 @@ it('builds an svg root with the fluent helpers', function () {
 });
 
 it('accepts a custom xmlns uri', function () {
-    $component = SvgComponentBuilder::make(SvgComponentEnum::SVG)->setXmlns('custom');
+    $component = SvgComponentFactory::make(SvgComponentEnum::SVG)->setXmlns('custom');
 
     expect($component->getAttribute('xmlns'))->toBe('custom');
 });
 
-it('resolves local themes with the local theme builder', function () {
-    $component = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::PATH);
+it('resolves local themes with the local theme factory', function () {
+    $component = SvgLocalThemeComponentFactory::make(SvgComponentEnum::PATH);
 
     expect($component)->toBeInstanceOf(SvgBackendComponent::class)
         ->and($component->getThemeManager())->toBeInstanceOf(LocalThemeManager::class)
@@ -53,8 +53,8 @@ it('resolves local themes with the local theme builder', function () {
 });
 
 it('isolates default and local theme paths per manager', function () {
-    $default = SvgComponentBuilder::make(SvgComponentEnum::PATH);
-    $local = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::PATH);
+    $default = SvgComponentFactory::make(SvgComponentEnum::PATH);
+    $local = SvgLocalThemeComponentFactory::make(SvgComponentEnum::PATH);
 
     expect($default->getThemeManager())->toBeInstanceOf(DefaultThemeManager::class)
         ->and($local->getThemeManager())->toBeInstanceOf(LocalThemeManager::class)
@@ -62,7 +62,7 @@ it('isolates default and local theme paths per manager', function () {
 });
 
 it('compiles themes from the app local theme path', function () {
-    $component = SvgLocalThemeComponentBuilder::make(SvgComponentEnum::PATH)
+    $component = SvgLocalThemeComponentFactory::make(SvgComponentEnum::PATH)
         ->setTheme('color', 'success');
 
     $component->getThemeManager()->setDefaultPath(__DIR__.'/../../fixtures/views/_themes/tailwind');
@@ -70,10 +70,10 @@ it('compiles themes from the app local theme path', function () {
     expect($component->compileTheme())->toBe('text-violet-900');
 });
 
-it('renders a builder component to html', function () {
-    $component = SvgComponentBuilder::make(SvgComponentEnum::SVG)
+it('renders a factory component to html', function () {
+    $component = SvgComponentFactory::make(SvgComponentEnum::SVG)
         ->setContents([
-            SvgComponentBuilder::make(SvgComponentEnum::CIRCLE)->setAttribute('r', '10'),
+            SvgComponentFactory::make(SvgComponentEnum::CIRCLE)->setAttribute('r', '10'),
         ]);
 
     $this->blade('{{ $component }}', ['component' => $component])
