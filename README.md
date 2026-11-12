@@ -20,9 +20,9 @@ composer require juaniquillo/svg-backend-components
 
 The package's service provider is discovered automatically by Laravel. Its Blade views are registered under the `svg::` namespace, no Tailwind configuration is needed unless you use themes.
 
-## Built on Laravel Backend Components
+## Built on Base + Laravel Backend Components
 
-This package is an SVG-flavored adapter over [juaniquillo/laravel-backend-component](https://github.com/juaniquillo/laravel-backend-component) ([Packagist](https://packagist.org/packages/juaniquillo/laravel-backend-component)), which provides the underlying engine: the component model, theme managers, and the Blade rendering pipeline. It is installed automatically as a dependency, no separate setup needed.
+This package is an SVG-flavored adapter over [juaniquillo/laravel-backend-component](https://github.com/juaniquillo/laravel-backend-component) ([Packagist](https://packagist.org/packages/juaniquillo/laravel-backend-component)) `^0.12.0`, which in turn is built on [juaniquillo/base-backend-component](https://github.com/juaniquillo/base-backend-component). State (attributes, contents, settings, themes, paths, serialization) lives in the base package; Blade rendering lives in the Laravel package. Both are installed automatically as dependencies, no separate setup needed.
 
 What this package adds on top:
 

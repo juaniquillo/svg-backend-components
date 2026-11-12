@@ -9,26 +9,26 @@ use Illuminate\Contracts\Support\Htmlable;
 use Juaniquillo\BackendComponents\Components\DefaultAttributeBag;
 use Juaniquillo\BackendComponents\Concerns\HasContent;
 use Juaniquillo\BackendComponents\Concerns\HasPath;
-use Juaniquillo\BackendComponents\Concerns\HasSettings;
 use Juaniquillo\BackendComponents\Concerns\IsBackendComponent;
-use Juaniquillo\BackendComponents\Concerns\IsThemeable;
-use Juaniquillo\BackendComponents\Contracts\AttributeBag;
-use Juaniquillo\BackendComponents\Contracts\BackendComponent;
-use Juaniquillo\BackendComponents\Contracts\ContentComponent;
-use Juaniquillo\BackendComponents\Contracts\PathComponent;
-use Juaniquillo\BackendComponents\Contracts\SettingsComponent;
 use Juaniquillo\BackendComponents\Contracts\StaticFactory;
-use Juaniquillo\BackendComponents\Contracts\ThemeComponent;
-use Juaniquillo\BackendComponents\Contracts\ThemeManager;
 use Juaniquillo\BackendComponents\Themes\DefaultThemeManager;
+use Juaniquillo\BaseBackendComponent\Concerns\HasSettings;
+use Juaniquillo\BaseBackendComponent\Concerns\IsThemeable;
+use Juaniquillo\BaseBackendComponent\Contracts\AttributeBag;
+use Juaniquillo\BaseBackendComponent\Contracts\BackendComponent;
+use Juaniquillo\BaseBackendComponent\Contracts\CompoundComponent;
+use Juaniquillo\BaseBackendComponent\Contracts\ThemeManager;
 use Juaniquillo\SvgBackendComponents\Concerns\HasSvgAttributes;
 use Juaniquillo\SvgBackendComponents\Contracts\SvgAttributesComponent;
 use Override;
 use ValueError;
 
-use function Juaniquillo\BackendComponents\isBackedEnum;
+use function Juaniquillo\BaseBackendComponent\isBackedEnum;
 
-final class SvgBackendComponent implements BackendComponent, ContentComponent, Htmlable, PathComponent, SettingsComponent, StaticFactory, SvgAttributesComponent, ThemeComponent
+/**
+ * @phpstan-import-type ComponentArray from BackendComponent
+ */
+final class SvgBackendComponent implements CompoundComponent, Htmlable, StaticFactory, SvgAttributesComponent
 {
     use HasContent;
     use HasPath;
@@ -84,28 +84,32 @@ final class SvgBackendComponent implements BackendComponent, ContentComponent, H
     public function getAttributeBag(): AttributeBag
     {
         return new DefaultAttributeBag(
-            $this->getAttributes(),
-            $this->processContent(),
-            $this->compileTheme(),
-            $this->getComponentPath(),
-            $this->getSettings(),
+            attributes: $this->getAttributes(),
+            content: $this->processContent(),
+            themes: $this->compileTheme(),
+            path: $this->getComponentPath(),
+            settings: $this->getSettings(),
         );
     }
 
+    /**
+     * @return ComponentArray
+     */
     public function toArray(): array
     {
         return [
             'name' => $this->getName(),
+            'component' => self::class,
             'attributes' => $this->getAttributes(),
-            'content' => $this->processContent()->toArray(),
-            'path' => $this->getComponentPath(),
-            'settings' => $this->getSettings(),
+            'contents' => $this->processContent()->toArray(),
             'theme' => [
-                'manager' => $this->themeManager::class,
+                'manager' => $this->getThemeManager()::class,
                 'themes' => $this->getThemes(),
-                'path' => $this->themeManager->getDefaultPath(),
-                'realPath' => $this->themeManager->getThemePath(),
+                'path' => $this->getThemeManager()->getDefaultPath(),
+                'realPath' => $this->getThemeManager()->getThemePath(),
             ],
+            'path' => $this->getPathOnly(),
+            'settings' => $this->getSettings(),
         ];
     }
 
