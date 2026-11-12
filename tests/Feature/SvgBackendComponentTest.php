@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Juaniquillo\BackendComponents\Contracts\ContentsComponent;
+use Juaniquillo\BaseBackendComponent\Contracts\ContentsComponent;
 use Juaniquillo\BackendComponents\Themes\DefaultThemeManager;
 use Juaniquillo\SvgBackendComponents\SvgBackendComponent;
 use Juaniquillo\SvgBackendComponents\SvgComponentEnum;
@@ -251,9 +251,10 @@ it('serializes the component to an array', function () {
 
     expect($array)
         ->toHaveKey('name', 'circle')
+        ->toHaveKey('component', SvgBackendComponent::class)
         ->toHaveKey('attributes', ['r' => '10'])
-        ->toHaveKey('content', ['Hello'])
-        ->toHaveKey('path', 'svg::.circle')
+        ->toHaveKey('contents', ['Hello'])
+        ->toHaveKey('path', null)
         ->toHaveKey('settings', [])
         ->toHaveKey('theme.manager', DefaultThemeManager::class)
         ->toHaveKey('theme.themes', $component->getThemes())
